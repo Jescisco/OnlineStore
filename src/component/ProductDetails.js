@@ -7,11 +7,20 @@ import {
   Pressable,
   View,
   Image,
+  TouchableOpacity,
 } from "react-native";
 
 const ProductDetails = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { Title, Img, Price, Description, Rate, Amount } = props;
+  const { Title, Img, Price, Rate, Amount } = props;
+  const [cartButton, setCartButton] = useState(false);
+  const color = cartButton ? "#FF5733" : "#ABFA35";
+  const text = cartButton ? "Remove" : "Add To "
+
+  const cartBtn = () => {
+    setCartButton((change) => !change);
+  };
+
   return (
     <View>
       <Modal
@@ -70,15 +79,9 @@ const ProductDetails = (props) => {
                 </View>
               </View>
               <Text>${Price}</Text>
-              <View style={styles.shoppingCartButtonContainer}>
-                <Text style={{ fontSize: 18 }}>Add To </Text>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/pastel-glyph/64/shopping-cart--v1.png",
-                  }}
-                  style={styles.shoppingCartButton}
-                />
-              </View>
+              <TouchableOpacity onPressIn={cartBtn}>
+                <Test color={color} text={text} cartButton={cartButton}/>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -94,7 +97,11 @@ const ProductDetails = (props) => {
 };
 
 const styles = StyleSheet.create({
-  rateAndAmount: { alignItems: "center", justifyContent: "center", marginBottom: 15, },
+  rateAndAmount: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 15,
+  },
   rate: {
     flexDirection: "row",
     alignItems: "center",
@@ -105,7 +112,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: 150,
-    backgroundColor: "#ABFA35",
     padding: 10,
     borderRadius: "20%",
   },
@@ -166,5 +172,24 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 });
+
+export const Test = (props) => {
+  const { color, text, cartButton } = props;
+  return (
+    <View
+      style={[styles.shoppingCartButtonContainer, { backgroundColor: color }]}
+    >
+      <Text style={{ fontSize: 18 }}>{text}</Text>
+      {!cartButton ? (
+        <Image
+        source={{
+          uri: "https://img.icons8.com/pastel-glyph/64/shopping-cart--v1.png",
+        }}
+        style={styles.shoppingCartButton}
+      />
+      ) : ""}
+    </View>
+  );
+};
 
 export default ProductDetails;
